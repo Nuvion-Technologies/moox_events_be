@@ -10,6 +10,7 @@ const team = new mongoose.Schema({
     active:{type:Boolean,default:true},
     facebook_link:{type:String},
     instagram_link:{type:String},
+    delete:{type:Boolean,default:false},
     uploadedOn:{type:Date ,default:Date.now},
 });
 

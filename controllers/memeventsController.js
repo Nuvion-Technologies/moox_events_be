@@ -1,4 +1,4 @@
-const Events = require('../models/Events');
+const Events = require('../models/events');
 const User = require('../models/user');
 const mongoose = require('mongoose');
 const service = require('../models/service');
@@ -62,7 +62,7 @@ exports.add_event = async (req, res) => {
 exports.get_active_events = async (req, res) => {
     try {
 
-        const events = await Events.find({active:true}, 'title description event_name event_date event_type active photo contentType');
+        const events = await Events.find({active:true,delete:false}, 'title description event_name event_date event_type active photo contentType');
         const eventsWithPhotos = events.map(event => ({
             _id: event._id,
             title: event.title,
@@ -90,7 +90,7 @@ exports.get_events = async (req, res) => {
             return res.status(400).json({ message: 'Unauthorized User' });
         }
 
-        const events = await Events.find({}, 'title description event_date event_type active photo contentType');
+        const events = await Events.find({delete:false}, 'title description event_date event_type active photo contentType');
         const eventsWithPhotos = events.map(event => ({
             _id: event._id,
             title: event.title,
@@ -130,3 +130,30 @@ exports.change_event_status = async (req, res) => {
         res.status(500).json({ message: 'Failed to update status.', error: error.message });
     }
 };
+
+
+exports.delete_events=async (req, res) => {
+    
+    const { event_id,user_id } = req.body;
+    console.log(1);
+    const userExists = await User.findById(user_id); // Find user by ID
+        if (!userExists) {
+            console.log(2);
+            return res.status(400).json({ message: 'Unauthorized User' });
+        }
+    try {
+        console.log(3);
+        const event = await Events.findById(event_id);
+        if (!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+        console.log(4);
+        event.delete = true; // Toggle the status
+        console.log(5);
+        await event.save();
+        console.log(6);
+        res.json({ message: `DELETED` });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to update status', error: error.message });
+    }
+}

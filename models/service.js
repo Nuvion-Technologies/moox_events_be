@@ -5,6 +5,7 @@ const serviceSchema = new mongoose.Schema({
     description: { type: String },
     photo: { type: Buffer, required: true },
     active: { type: Boolean, default: true },
+    delete: { type: Boolean, default: false },
     uploadedOn:{type:Date,default:Date.now},
 });
 

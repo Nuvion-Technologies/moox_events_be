@@ -1,6 +1,6 @@
-const ContactUs=require("../models/ContactUs");
+const ContactUs=require("../models/contactus");
 const User = require('../models/user');
-const Events = require("../models/ContactUs");
+const Events = require("../models/contactus");
 const mongoose = require("mongoose");
 
 exports.getContactUs = async (req, res) => {

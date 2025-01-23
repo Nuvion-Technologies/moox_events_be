@@ -11,6 +11,7 @@ const events = new mongoose.Schema({
     event_type:{type:Schema.Types.ObjectId, ref: 'service'},
     active: { type: Boolean, default: true },
     uploadedOn:{type:Date,default:Date.now},
+    delete:{type:Boolean,default:false}
 });
 
 // Explicitly naming the model to avoid collisions

@@ -44,7 +44,7 @@ exports.get_members = async (req, res) => {
             return res.status(400).json({ message: 'Unauthorized User' });
         }
 
-        const events = await Team.find();
+        const events = await Team.find({delete:false});
         const eventsWithPhotos = events.map(event => ({
             id:event._id,
             name: event.name,
@@ -87,7 +87,7 @@ exports.change_member_status = async (req, res) => {
 
 exports.get_active_members = async (req, res) => {
     try {
-        const events = await Team.find({active: true});
+        const events = await Team.find({active: true,delete:false});
         const eventsWithPhotos = events.map(event => ({
             id:event._id,
             name: event.name,
@@ -104,3 +104,29 @@ exports.get_active_members = async (req, res) => {
         res.status(500).json({ message: 'Error fetching events.', error: error.message });
     }
 };
+
+exports.delete_member=async (req, res) => {
+    
+    const { event_id,user_id } = req.body;
+    console.log(1);
+    const userExists = await User.findById(user_id); // Find user by ID
+        if (!userExists) {
+            console.log(2);
+            return res.status(400).json({ message: 'Unauthorized User' });
+        }
+    try {
+        console.log(3);
+        const event = await Team.findById(event_id);
+        if (!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+        console.log(4);
+        event.delete = true; // Toggle the status
+        console.log(5);
+        await event.save();
+        console.log(6);
+        res.json({ message: `DELETED` });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to update status', error: error.message });
+    }
+}

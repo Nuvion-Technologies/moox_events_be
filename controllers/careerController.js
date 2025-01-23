@@ -1,6 +1,6 @@
 
-const Career = require('../models/Career');
-const Application = require('../models/Application');
+const Career = require('../models/career');
+const Application = require('../models/application');
 const User = require("../models/user");
 const mongoose = require("mongoose");
 

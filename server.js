@@ -6,8 +6,8 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-app.use(express.json({ limit: '100000mb' })); // Use Express' built-in JSON parser
-app.use(express.urlencoded({ limit: '100000mb', extended: true })); // For URL-encoded data
+app.use(express.json({ limit: '1gb' })); // Use Express' built-in JSON parser
+app.use(express.urlencoded({ limit: '1gb', extended: true })); // For URL-encoded data
 
 // CORS configuration
 app.use(cors({
@@ -32,6 +32,7 @@ app.use('/moox_events/api/contactus', require('./routes/contactusRoutes'));
 app.use('/moox_events/api/enquiry', require('./routes/enquiryRoutes'));
 app.use('/moox_events/api/team', require('./routes/teamRoutes'));
 app.use('/moox_events/api/achievements', require('./routes/achievementsRoutes'));
+app.use('/moox_events/api/blogs', require('./routes/blogsRoutes'));
 
 // Start server
 const PORT = process.env.PORT || 5000;

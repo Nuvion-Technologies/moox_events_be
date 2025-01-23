@@ -45,7 +45,7 @@ exports.get_services=async (req, res) => {
         if (!userExists) {
             return res.status(400).json({ message: 'Unauthorized User' });
         }
-        const clients = await Service.find({}, 'name photo active _id');
+        const clients = await Service.find({delete:false}, 'name photo active _id');
         const clientsWithPhotos = clients.map(client => ({
             _id: client._id,
             name: client.name,
@@ -64,7 +64,7 @@ exports.get_active_services=async (req, res) => {
     try {
 
 
-        const clients = await Service.find({active:true}, 'name photo active _id');
+        const clients = await Service.find({active:true,delete:false}, 'name description photo active _id');
         const clientsWithPhotos = clients.map(client => ({
 
             name: client.name,
@@ -96,6 +96,32 @@ exports.change_status=async (req, res) => {
         event.active = status; // Toggle the status
         await event.save();
         res.json({ message: `Event status updated to ${status ? 'active' : 'inactive'}` });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to update status', error: error.message });
+    }
+}
+
+exports.delete_gallery=async (req, res) => {
+    
+    const { event_id,user_id } = req.body;
+    console.log(1);
+    const userExists = await User.findById(user_id); // Find user by ID
+        if (!userExists) {
+            console.log(2);
+            return res.status(400).json({ message: 'Unauthorized User' });
+        }
+    try {
+        console.log(3);
+        const event = await Service.findById(event_id);
+        if (!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+        console.log(4);
+        event.delete = true; // Toggle the status
+        console.log(5);
+        await event.save();
+        console.log(6);
+        res.json({ message: `DELETED` });
     } catch (error) {
         res.status(500).json({ message: 'Failed to update status', error: error.message });
     }

@@ -6,6 +6,7 @@ const clientSchema = new mongoose.Schema({
     contentType: { type: String },
     active: { type: Boolean, default: true },
     uploadedOn:{type:Date,default:Date.now},
+    delete:{type:Boolean,default:false}
 });
 
 // Explicitly naming the model to avoid collisions
